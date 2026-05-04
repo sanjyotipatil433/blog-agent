@@ -5,3 +5,6 @@ backgroundColor="#0a0a0f"
 secondaryBackgroundColor="#13131f"
 textColor="#ffffff"
 font="sans serif"
+
+[ui]
+hideSidebarNav=true
