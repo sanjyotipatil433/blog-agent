@@ -131,24 +131,24 @@ st.markdown(f"""
 title_col, toggle_col = st.columns([11, 1])
 with title_col:
     st.markdown(f"""
-    <div style="background:{bg};padding:16px 24px;border-bottom:1px solid {border};text-align:center;">
-        <div style="{neon}color:{title_color};font-size:2.6rem;font-weight:900;letter-spacing:-1px;">✍️ AI Blog Generator</div>
-        <div style="margin-top:6px;">
-            <span style="background:{accent}18;border:1px solid {accent}33;border-radius:20px;padding:3px 14px;font-size:12px;color:{subtext};">
-                Generate professional blogs instantly
-            </span>
-        </div>
+<div style="background:{bg};padding:10px 24px 10px 24px;border-bottom:1px solid {border};text-align:center;margin-top:-60px;">
+    <div style="{neon}color:{title_color};font-size:3rem;font-weight:900;letter-spacing:-1px;">✍️ AI Blog Generator</div>
+    <div style="margin-top:4px;">
+        <span style="background:{accent}18;border:1px solid {accent}33;border-radius:20px;padding:3px 14px;font-size:12px;color:{subtext};">
+            Generate professional blogs instantly
+        </span>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 with toggle_col:
-    st.markdown(f'<div style="background:{bg};padding:20px 8px;border-bottom:1px solid {border};">', unsafe_allow_html=True)
+    st.markdown(f'<div style="background:{bg};padding:6px 4px;border-bottom:1px solid {border};text-align:right;">', unsafe_allow_html=True)
     if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_btn"):
         st.session_state.dark_mode = not st.session_state.dark_mode
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ── MAIN LAYOUT ───────────────────────────────────────────
-left, right = st.columns([1, 2.5])
+left, right = st.columns([1, 2.5], gap="small")
 
 # ── LEFT PANEL ────────────────────────────────────────────
 with left:
