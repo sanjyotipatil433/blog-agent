@@ -14,21 +14,19 @@ if "blog_history" not in st.session_state:
     st.session_state.blog_history = []
 if "current_blog" not in st.session_state:
     st.session_state.current_blog = None
-if "copied" not in st.session_state:
-    st.session_state.copied = False
 
+# Theme colors
 if st.session_state.dark_mode:
     bg = "#0a0a0f"
     sidebar_bg = "#13131f"
     input_bg = "#1e1e35"
     text = "#ffffff"
-    subtext = "#888888"
+    subtext = "#aaaaaa"
     border = "#2a2a3e"
     accent = "#cc44ff"
-    neon = "text-shadow: 0 0 10px #ff00ff, 0 0 20px #7700ff;"
+    neon = "text-shadow: 0 0 10px #ff00ff, 0 0 25px #7700ff, 0 0 50px #ff00ff;"
     title_color = "#cc44ff"
-    dropdown_bg = "#1e1e35"
-    dropdown_text = "#ffffff"
+    heading_color = "#cc44ff"
 else:
     bg = "#f5f5f5"
     sidebar_bg = "#ffffff"
@@ -39,11 +37,11 @@ else:
     accent = "#f63366"
     neon = ""
     title_color = "#f63366"
-    dropdown_bg = "#ffffff"
-    dropdown_text = "#1a1a1a"
+    heading_color = "#f63366"
 
 st.markdown(f"""
 <style>
+    /* Hide Streamlit chrome */
     #MainMenu {{ visibility: hidden !important; }}
     footer {{ visibility: hidden !important; }}
     .stDeployButton {{ display: none !important; }}
@@ -51,21 +49,41 @@ st.markdown(f"""
     div[data-testid="stToolbar"] {{ display: none !important; }}
     [data-testid="stStatusWidget"] {{ display: none !important; }}
     header[data-testid="stHeader"] {{ background-color: {bg} !important; height: 0px !important; }}
+
+    /* Base */
     .stApp {{ background-color: {bg}; }}
     .main .block-container {{
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         max-width: 100% !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }}
+
+    /* Sidebar */
     section[data-testid="stSidebar"] {{
         background-color: {sidebar_bg} !important;
         border-right: 1px solid {border} !important;
     }}
-    section[data-testid="stSidebar"] > div {{ padding-top: 1rem !important; }}
-    p, label {{ color: {text} !important; }}
-    h1, h2, h3 {{ color: {text} !important; }}
+    section[data-testid="stSidebar"] > div {{
+        padding-top: 0.5rem !important;
+    }}
+
+    /* Text */
+    p, span, div {{ color: {text}; }}
+    h1, h2, h3, h4 {{ color: {text} !important; }}
+    label {{ color: {text} !important; }}
+
+    /* Section headings in sidebar */
+    .section-heading {{
+        font-size: 13px;
+        font-weight: 700;
+        color: {heading_color} !important;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin: 16px 0 8px 0;
+        display: block;
+    }}
 
     /* Input */
     .stTextInput input {{
@@ -73,15 +91,21 @@ st.markdown(f"""
         color: {text} !important;
         border: 1px solid {border} !important;
         border-radius: 8px !important;
+        font-size: 14px !important;
     }}
-    .stTextInput input:focus {{ border-color: {accent} !important; }}
+    .stTextInput input:focus {{
+        border-color: {accent} !important;
+        box-shadow: 0 0 0 2px {accent}33 !important;
+    }}
+    .stTextInput input::placeholder {{ color: {subtext} !important; }}
 
-    /* All buttons default */
+    /* Default buttons */
     .stButton>button {{
         background-color: {input_bg} !important;
         color: {text} !important;
         border: 1px solid {border} !important;
         border-radius: 8px !important;
+        font-size: 14px !important;
         transition: all 0.2s !important;
     }}
     .stButton>button:hover {{
@@ -89,19 +113,7 @@ st.markdown(f"""
         color: {accent} !important;
     }}
 
-    /* Generate button */
-    div[data-testid="stButton"].generate-btn > button,
-    .generate-btn .stButton>button {{
-        background: linear-gradient(135deg, #cc44ff, #7700ff) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        box-shadow: 0 0 20px #cc44ff77 !important;
-    }}
-
-    /* Download */
+    /* Download button */
     .stDownloadButton>button {{
         background-color: {input_bg} !important;
         color: {text} !important;
@@ -110,10 +122,10 @@ st.markdown(f"""
     }}
 
     /* Radio */
-    .stRadio label {{ color: {text} !important; }}
-    .stRadio div {{ color: {text} !important; }}
+    .stRadio label {{ color: {text} !important; font-size: 14px !important; }}
+    .stRadio > div {{ gap: 8px !important; }}
 
-    /* Selectbox — fix dark mode */
+    /* Selectbox */
     .stSelectbox > div > div {{
         background-color: {input_bg} !important;
         color: {text} !important;
@@ -121,10 +133,17 @@ st.markdown(f"""
         border-radius: 8px !important;
     }}
     .stSelectbox svg {{ fill: {text} !important; }}
-    [data-baseweb="select"] * {{ color: {text} !important; background-color: {input_bg} !important; }}
-    [data-baseweb="popover"] * {{ color: {text} !important; background-color: {input_bg} !important; }}
-    [role="option"] {{ color: {text} !important; background-color: {input_bg} !important; }}
-    [role="option"]:hover {{ background-color: {border} !important; }}
+    [data-baseweb="select"] * {{
+        color: {text} !important;
+        background-color: {input_bg} !important;
+    }}
+    [data-baseweb="popover"] * {{
+        color: {text} !important;
+        background-color: {input_bg} !important;
+    }}
+    [role="option"]:hover {{
+        background-color: {border} !important;
+    }}
 
     /* Blog card */
     .blog-card {{
@@ -133,89 +152,124 @@ st.markdown(f"""
         border-left: 4px solid {accent};
         border-radius: 12px;
         padding: 1.5rem;
-        line-height: 1.8;
+        line-height: 1.9;
         color: {text};
+        font-size: 15px;
     }}
-    .stats-bar {{ color: {subtext}; font-size: 0.82rem; margin: 0.3rem 0 1rem 0; }}
+    .stats-bar {{
+        color: {subtext};
+        font-size: 13px;
+        margin: 6px 0 16px 0;
+    }}
 
-    /* Expander */
+    /* History expander */
     [data-testid="stExpander"] {{
         border: 1px solid {border} !important;
         border-radius: 8px !important;
         background: {input_bg} !important;
-        margin-bottom: 4px !important;
+        margin-bottom: 6px !important;
     }}
-    .streamlit-expanderHeader {{ color: {text} !important; }}
-    .streamlit-expanderHeader p {{ color: {text} !important; }}
+    .streamlit-expanderHeader p {{
+        color: {text} !important;
+        font-size: 13px !important;
+    }}
 
-    /* Full width header */
-    .top-bar {{
-        width: 100%;
+    /* Title bar */
+    .title-bar {{
         background: {bg};
         border-bottom: 1px solid {border};
-        padding: 16px 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-sizing: border-box;
+        padding: 18px 32px 14px 32px;
+        text-align: center;
+        position: relative;
     }}
-    .blog-title {{
+    .main-title {{
         {neon}
         color: {title_color};
-        font-size: 2rem;
+        font-size: 2.6rem;
         font-weight: 900;
         margin: 0;
-        letter-spacing: -0.5px;
+        letter-spacing: -1px;
+        display: block;
     }}
-    .subtitle-pill {{
-        background: {accent}22;
-        color: {accent};
-        font-size: 0.78rem;
+    .main-subtitle {{
+        color: {subtext};
+        font-size: 13px;
+        margin-top: 6px;
+        background: {accent}18;
+        border: 1px solid {accent}33;
         border-radius: 20px;
-        padding: 2px 12px;
+        padding: 3px 14px;
         display: inline-block;
-        margin-top: 4px;
-        border: 1px solid {accent}44;
     }}
-    .theme-toggle {{
-        background: {input_bg};
-        border: 1px solid {border};
-        border-radius: 20px;
-        padding: 6px 14px;
-        cursor: pointer;
-        font-size: 14px;
-        color: {text};
-        position: absolute;
-        right: 24px;
-        top: 16px;
+
+    /* Glowing generate button */
+    .gen-btn .stButton>button {{
+        background: linear-gradient(135deg, #cc44ff 0%, #7700ff 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        padding: 0.6rem !important;
+        box-shadow: 0 0 20px #cc44ff66, 0 0 40px #cc44ff33 !important;
+        transition: all 0.3s !important;
+    }}
+    .gen-btn .stButton>button:hover {{
+        box-shadow: 0 0 30px #cc44ffaa, 0 0 60px #cc44ff55 !important;
+        transform: translateY(-2px) !important;
+        color: white !important;
+    }}
+
+    /* Empty state */
+    .empty-state {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 65vh;
+        text-align: center;
+        color: {subtext};
+    }}
+    /* Theme toggle fixed top right */
+    .theme-toggle-wrapper .stButton>button {{
+        background: {input_bg} !important;
+        color: {text} !important;
+        border: 1px solid {border} !important;
+        border-radius: 20px !important;
+        padding: 4px 12px !important;
+        font-size: 16px !important;
+        position: fixed !important;
+        top: 12px !important;
+        right: 16px !important;
+        z-index: 999 !important;
+        width: auto !important;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# ── TOP BAR (full width) ──────────────────────────────
-top_col1, top_col2, top_col3 = st.columns([1, 6, 1])
-with top_col1:
-    st.markdown(f'<div style="height:70px;background:{bg};border-bottom:1px solid {border};"></div>', unsafe_allow_html=True)
-with top_col2:
-    st.markdown(f"""
-    <div style="background:{bg};border-bottom:1px solid {border};padding:12px 0;text-align:center;">
-        <div class="blog-title">✍️ AI Blog Generator</div>
-        <div class="subtitle-pill">Generate professional blogs instantly</div>
-    </div>
-    """, unsafe_allow_html=True)
-with top_col3:
-    st.markdown(f'<div style="height:10px;background:{bg};border-bottom:1px solid {border};"></div>', unsafe_allow_html=True)
-    if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_btn"):
-        st.session_state.dark_mode = not st.session_state.dark_mode
-        st.rerun()
+# ── TITLE BAR ─────────────────────────────────────────────
+st.markdown(f"""
+<div class="title-bar">
+    <span class="main-title">✍️ AI Blog Generator</span>
+    <div><span class="main-subtitle">Generate professional blogs instantly</span></div>
+</div>
+""", unsafe_allow_html=True)
 
-# ── SIDEBAR ───────────────────────────────────────────
+# Fixed theme toggle top right
+st.markdown('<div class="theme-toggle-wrapper">', unsafe_allow_html=True)
+if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_btn"):
+    st.session_state.dark_mode = not st.session_state.dark_mode
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ── SIDEBAR ───────────────────────────────────────────────
 with st.sidebar:
-    st.markdown(f'<div style="font-size:10px;color:{subtext};letter-spacing:1px;margin-bottom:4px;">📝 TOPIC</div>', unsafe_allow_html=True)
+    # Topic
+    st.markdown(f'<span class="section-heading">📝 Topic</span>', unsafe_allow_html=True)
     topic = st.text_input("topic", placeholder="eg. Will AI eat jobs?", label_visibility="collapsed")
 
-    st.markdown(f'<div style="font-size:10px;color:{subtext};letter-spacing:1px;margin:12px 0 4px;">⚙️ PARAMETERS</div>', unsafe_allow_html=True)
-
+    # Parameters
+    st.markdown(f'<span class="section-heading">⚙️ Parameters</span>', unsafe_allow_html=True)
     blog_length = st.radio(
         "length",
         ["short", "long"],
@@ -223,7 +277,6 @@ with st.sidebar:
         format_func=lambda x: "⚡ Short" if x == "short" else "📖 Long",
         label_visibility="collapsed"
     )
-
     tone = st.selectbox(
         "tone",
         ["formal", "casual", "sarcastic", "inspirational"],
@@ -238,52 +291,26 @@ with st.sidebar:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Glowing generate button
-    st.markdown(f"""
-    <style>
-    div[data-testid="stButton"]:has(button[kind="secondary"]) {{ display: none; }}
-    .gen-wrap .stButton>button {{
-        background: linear-gradient(135deg, #cc44ff, #7700ff) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        box-shadow: 0 0 20px #cc44ff77 !important;
-        padding: 0.6rem !important;
-    }}
-    .gen-wrap .stButton>button:hover {{
-        box-shadow: 0 0 30px #cc44ffcc !important;
-        transform: translateY(-1px) !important;
-    }}
-    </style>
-    <div class="gen-wrap">
-    """, unsafe_allow_html=True)
+    # Glowing Generate button
+    st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
     generate = st.button("🚀 Generate Blog", use_container_width=True, key="gen_btn")
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # Share + Clear
     col_s, col_c = st.columns([1, 1])
     with col_s:
-        share_clicked = st.button("🔗 Share", use_container_width=True)
+        share = st.button("🔗 Share", use_container_width=True)
     with col_c:
         if st.button("🗑️ Clear", use_container_width=True):
             st.session_state.current_blog = None
             st.rerun()
 
-    if share_clicked:
-        st.markdown(f"""
-        <div style="background:{input_bg};border:1px solid {border};border-radius:8px;padding:8px 12px;margin-top:8px;">
-            <div style="font-size:10px;color:{subtext};margin-bottom:4px;">App link:</div>
-            <div style="font-size:11px;color:{accent};word-break:break-all;">https://blog-agent-wq4kzbsmq5azaq4gf2axsv.streamlit.app</div>
-        </div>
-        <script>
-        navigator.clipboard.writeText('https://blog-agent-wq4kzbsmq5azaq4gf2axsv.streamlit.app');
-        </script>
-        """, unsafe_allow_html=True)
-        st.success("✅ Link copied!")
+    if share:
+        st.success("✅ Copy this link:")
+        st.code("https://blog-agent-wq4kzbsmq5azaq4gf2axsv.streamlit.app", language=None)
 
-    st.markdown("---")
-    st.markdown(f'<div style="font-size:10px;color:{subtext};letter-spacing:1px;margin-bottom:8px;">📚 HISTORY</div>', unsafe_allow_html=True)
+    # History
+    st.markdown(f'<span class="section-heading">📚 History</span>', unsafe_allow_html=True)
 
     seen = set()
     unique_history = []
@@ -300,14 +327,14 @@ with st.sidebar:
             st.rerun()
         for i, item in enumerate(unique_history):
             with st.expander(f"📄 {item['topic'][:25]}"):
-                st.caption(f"{item['length'].capitalize()} · {item.get('tone','formal').capitalize()}")
+                st.caption(f"{item['length'].capitalize()} · {item.get('tone','formal').capitalize()} · {item['time']}")
                 if st.button("Load", key=f"load_{i}", use_container_width=True):
                     st.session_state.current_blog = item
                     st.rerun()
     else:
         st.caption("No blogs yet!")
 
-# ── MAIN AREA ─────────────────────────────────────────
+# ── MAIN AREA ─────────────────────────────────────────────
 if generate:
     if topic:
         with st.spinner("✍️ Writing your blog..."):
@@ -335,7 +362,7 @@ if generate:
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
     else:
-        st.warning("⚠️ Please enter a topic!")
+        st.warning("⚠️ Please enter a topic first!")
 
 if st.session_state.current_blog:
     blog = st.session_state.current_blog
@@ -357,9 +384,9 @@ if st.session_state.current_blog:
     )
 else:
     st.markdown(f"""
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:65vh;text-align:center;">
-        <div style="font-size:56px;margin-bottom:16px;">✍️</div>
-        <div style="font-size:1.1rem;color:{subtext};">Enter a topic and click Generate Blog</div>
-        <div style="font-size:0.85rem;color:{subtext};margin-top:6px;opacity:0.6;">Your blog will appear here</div>
+    <div class="empty-state">
+        <div style="font-size:60px;margin-bottom:20px;">✍️</div>
+        <div style="font-size:1.1rem;font-weight:600;">Enter a topic and click Generate Blog</div>
+        <div style="font-size:0.85rem;margin-top:8px;opacity:0.6;">Your blog will appear here</div>
     </div>
     """, unsafe_allow_html=True)
