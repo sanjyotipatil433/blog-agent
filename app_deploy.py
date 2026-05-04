@@ -174,13 +174,36 @@ st.markdown(f"""
         font-size: 13px !important;
     }}
 
-    /* Title bar */
+    /* Fixed title bar */
     .title-bar {{
-        background: {bg};
-        border-bottom: 1px solid {border};
-        padding: 18px 32px 14px 32px;
-        text-align: center;
-        position: relative;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 998 !important;
+        background: {bg} !important;
+        border-bottom: 1px solid {border} !important;
+        padding: 14px 32px !important;
+        text-align: center !important;
+    }}
+    
+    /* Push content down so it doesn't hide under fixed bar */
+    .main .block-container {{
+        padding-top: 100px !important;
+    }}
+    
+    /* Theme toggle fixed top right */
+    .theme-toggle-wrapper .stButton>button {{
+        position: fixed !important;
+        top: 14px !important;
+        right: 16px !important;
+        z-index: 999 !important;
+        border-radius: 20px !important;
+        padding: 4px 12px !important;
+        width: auto !important;
+        background: {input_bg} !important;
+        color: {text} !important;
+        border: 1px solid {border} !important;
     }}
     .main-title {{
         {neon}
@@ -243,6 +266,14 @@ st.markdown(f"""
         right: 16px !important;
         z-index: 999 !important;
         width: auto !important;
+    }}
+    /* Always show sidebar toggle */
+    button[data-testid="collapsedControl"] {{
+        display: flex !important;
+        background: {input_bg} !important;
+        color: {text} !important;
+        border: 1px solid {border} !important;
+        border-radius: 8px !important;
     }}
 </style>
 """, unsafe_allow_html=True)
