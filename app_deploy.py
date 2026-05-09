@@ -124,24 +124,23 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ── HEADER ────────────────────────────────────────────────
-h1, h2 = st.columns([9, 1])
-with h1:
-    st.markdown(f"""
-    <div style="text-align:center;padding:10px 0 16px 0;">
-        <div style="{neon}color:{accent};font-size:2.8rem;font-weight:900;letter-spacing:-1px;">
-            ✍️ AI Blog Generator
-        </div>
-        <div style="margin-top:8px;">
-        <<span style="background:{accent}15;border:1px solid {accent}30;
-    border-radius:20px;padding:5px 20px;font-size:14px;
-    color:{'#c8a84b' if st.session_state.dark_mode else '#888888'};">
-    Generate professional blogs instantly
-</span>
-        </div>
+st.markdown(f"""
+<div style="text-align:center;padding:10px 0 16px 0;border-bottom:1px solid {border};margin-bottom:8px;">
+    <div style="{neon}color:{accent};font-size:2.8rem;font-weight:900;letter-spacing:-1px;">
+        ✍️ AI Blog Generator
     </div>
-    """, unsafe_allow_html=True)
-with h2:
-    st.write("")
+    <div style="margin-top:8px;">
+        <span style="background:#c8a84b15;border:1px solid #c8a84b30;
+            border-radius:20px;padding:5px 20px;font-size:14px;
+            color:{'#c8a84b' if st.session_state.dark_mode else '#888888'};">
+            Generate professional blogs instantly
+        </span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([5, 1, 5])
+with col2:
     if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme"):
         st.session_state.dark_mode = not st.session_state.dark_mode
         st.rerun()
