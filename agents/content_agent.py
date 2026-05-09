@@ -16,28 +16,32 @@ def generate_content(state: dict) -> dict:
     if length == "short":
         word_count = "200-300 words"
         sections = "Introduction and Conclusion only"
+    elif length == "medium":
+        word_count = "400-500 words"
+        sections = "Introduction, 2 sections with subheadings, Conclusion"
     else:
         word_count = "500-800 words"
         sections = "Introduction, 3-4 sections with subheadings, Conclusion"
 
     tone_instructions = {
-    "formal": "Use professional, academic language. Be authoritative and structured. No jokes.",
-    "casual": "Write like texting a friend. Short sentences, simple words. Use 'you' a lot.",
-    "funny": "Be sarcastic and witty but hit real truths. Like a comedian telling hard facts. Every paragraph should make the reader laugh but also think. Use irony and dry humor.",
-    "inspirational": "Be deeply motivating. Use powerful words and emotional stories. Make the reader want to change their life right now!"
-}
+        "formal": "Use sophisticated vocabulary, complex sentence structures and academic language. Sound like a Harvard professor.",
+        "casual": "Write like you are texting a friend. Use very simple words, short sentences, contractions like don't/can't/won't. Feel warm and friendly.",
+        "inspirational": "Be deeply emotional and motivating. Use powerful words, tell stories, make the reader feel they can change their life right now."
+    }
 
     prompt = f"""You are an expert blog writer.
 Title: {state['chosen_title']}
 Topic: {state['context']}
-Tone: {tone_instructions.get(tone, tone_instructions['formal'])}
+
+TONE INSTRUCTION — this is the most important rule:
+{tone_instructions.get(tone, tone_instructions['formal'])}
 
 Write a {length} blog post with:
 - {sections}
 - Exactly {word_count}
 - Do NOT repeat the title inside the blog body
 - Start directly with the introduction
-- STRICTLY follow the tone instructions above"""
+- STRICTLY follow the tone — the reader must immediately feel the difference"""
 
     response = llm.invoke(prompt)
 

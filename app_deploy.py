@@ -22,7 +22,7 @@ text = "#ffffff" if st.session_state.dark_mode else "#1a1a1a"
 subtext = "#888888" if st.session_state.dark_mode else "#666666"
 border = "#2a2a3e" if st.session_state.dark_mode else "#e0e0e0"
 accent = "#cc44ff" if st.session_state.dark_mode else "#f63366"
-neon = "text-shadow:0 0 10px #ff00ff,0 0 25px #7700ff;" if st.session_state.dark_mode else ""
+neon = "text-shadow:0 0 8px #cc44ff55,0 0 15px #cc44ff33;" if st.session_state.dark_mode else ""
 
 st.markdown(f"""
 <style>
@@ -130,10 +130,10 @@ with h1:
             ✍️ AI Blog Generator
         </div>
         <div style="margin-top:8px;">
-            <span style="background:{accent}18;border:1px solid {accent}33;
-                border-radius:20px;padding:3px 16px;font-size:12px;color:{subtext};">
-                Generate professional blogs instantly
-            </span>
+            <span style="background:{accent}22;border:1px solid {accent}66;
+    border-radius:20px;padding:5px 20px;font-size:14px;color:{accent};">
+    Generate professional blogs instantly
+</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -151,19 +151,22 @@ topic = st.text_input("", placeholder="✏️  Enter your topic — eg. Will AI 
 c1, c2 = st.columns([1, 1])
 with c1:
     blog_length = st.radio(
-        "Length", ["short", "long"], horizontal=True,
-        format_func=lambda x: "⚡ Short (200-300 words)" if x == "short" else "📖 Long (500-800 words)"
-    )
+    "Length", ["short", "medium", "long"], horizontal=True,
+    format_func=lambda x: {
+        "short": "⚡ Short (200-300 words)",
+        "medium": "📄 Medium (400-500 words)",
+        "long": "📖 Long (500-800 words)"
+    }[x]
+)
 with c2:
     tone = st.selectbox(
         "Tone",
-        ["formal", "casual", "sarcastic", "inspirational"],
+        ["formal", "casual", "inspirational"],
         format_func=lambda x: {
-            "formal": "🎩 Professional — high level English",
-            "casual": "😊 Casual — simple everyday language",
-            "sarcastic": "😏 Sarcastic — funny but hits reality",
-            "inspirational": "💪 Inspirational — motivating"
-        }[x]
+    "formal": "🎩 Professional",
+    "casual": "😊 Casual",
+    "inspirational": "💪 Inspirational"
+}[x]
     )
 
 # ── BUTTONS ───────────────────────────────────────────────
