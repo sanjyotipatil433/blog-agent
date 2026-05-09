@@ -130,8 +130,8 @@ with h1:
             ✍️ AI Blog Generator
         </div>
         <div style="margin-top:8px;">
-        <span style="background:#ffffff15;border:1px solid #ffffff33;
-    border-radius:20px;padding:5px 20px;font-size:14px;color:#ffffff;">
+        <span style="background:#c8a84b15;border:1px solid #c8a84b30;
+    border-radius:20px;padding:5px 20px;font-size:14px;color:#c8a84b;">
     Generate professional blogs instantly
 </span>
         </div>
