@@ -69,6 +69,8 @@ st.markdown(f"""
         border-radius:8px!important;
     }}
     .stRadio label {{color:{text}!important;}}
+    .stRadio label p {{color:{text}!important;}}
+    .stRadio div {{color:{text}!important;}}
     .stSelectbox>div>div {{
         background-color:{input_bg}!important;
         color:{text}!important;
@@ -130,8 +132,9 @@ with h1:
             ✍️ AI Blog Generator
         </div>
         <div style="margin-top:8px;">
-        <span style="background:#c8a84b15;border:1px solid #c8a84b30;
-    border-radius:20px;padding:5px 20px;font-size:14px;color:#c8a84b;">
+        <<span style="background:{accent}15;border:1px solid {accent}30;
+    border-radius:20px;padding:5px 20px;font-size:14px;
+    color:{'#c8a84b' if st.session_state.dark_mode else '#888888'};">
     Generate professional blogs instantly
 </span>
         </div>
