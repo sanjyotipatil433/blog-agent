@@ -139,8 +139,8 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([5, 1, 5])
-with col2:
+t1, t2 = st.columns([11, 1])
+with t2:
     if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme"):
         st.session_state.dark_mode = not st.session_state.dark_mode
         st.rerun()
